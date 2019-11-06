@@ -1,7 +1,7 @@
 package jp.co.sample.form;
 
 /**
- * ログイン時に志位応するフォーム.
+ * ログイン時に使用するフォーム.
  * 
  * @author sakai
  *

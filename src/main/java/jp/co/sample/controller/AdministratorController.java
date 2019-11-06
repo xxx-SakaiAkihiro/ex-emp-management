@@ -1,8 +1,11 @@
 package jp.co.sample.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -12,7 +15,7 @@ import jp.co.sample.form.LoginForm;
 import jp.co.sample.service.AdministratorService;
 
 /**
- * 管理者登録画面に表示する処理を記述する.
+ * 管理者情報を操作するコントローラ.
  * 
  * @author sakai
  *
@@ -23,31 +26,24 @@ public class AdministratorController {
 
 	@Autowired
 	private AdministratorService administratorService;
+	
+	@Autowired
+	private HttpSession session;
 
-	/**
-	 * InsertAdministratorFormをインスタンス化しそのままreturnする処理.
-	 * 
-	 * @return Modelオブジェクトに格納されるInsertAdministratorFormオブジェクト
-	 */
 	@ModelAttribute
 	public InsertAdministratorForm setUpInsertAdministratorForm() {
 		return new InsertAdministratorForm();
 	}
 	
-	/**
-	 * LoginFormをインスタンス化しそのままreturnする処理.
-	 * 
-	 * @return Modelオブジェクトに格納されるLoginFormオブジェクト
-	 */
 	@ModelAttribute
 	public LoginForm setUpLoginForm() {
 		return new LoginForm();
 	}
 
 	/**
-	 * 「administrator/insert.html」にフォワードする処理.
+	 * 管理者情報登録画面にフォワードする処理.
 	 * 
-	 * @return 「administrator/insert.html」にフォワード
+	 * @return 管理者情報登録画面にフォワード
 	 */
 	@RequestMapping("/toInsert")
 	public String toInsert() {
@@ -55,9 +51,9 @@ public class AdministratorController {
 	}
 	
 	/**
-	 * 「administrator/login.html」にフォワードする処理.
+	 * ログイン画面にフォワードする処理.
 	 * 
-	 * @return 「administrator/login.html」にフォワード
+	 * @return ログイン画面にフォワード
 	 */
 	@RequestMapping("/")
 	public String toLogin() {
@@ -77,6 +73,25 @@ public class AdministratorController {
 		administratorService.insert(administrator);
 		return "redirect:/";
 	}
-	
+
+	/**
+	 * ログイン処理をする.
+	 * 
+	 * @param form メールアドレスとパスワード
+	 * @param model エラーメッセージ表示用
+	 * 	@return ログイン失敗時、ログイン画面にフォワード
+	 * @return ログイン成功時、従業員情報一覧にフォワード
+	 */
+	@RequestMapping("/login")
+	public String login(LoginForm form, Model model) {
+		Administrator administrator = administratorService.login(form.getMailAddress(), form.getPassword());
+		if(administrator == null) {
+			model.addAttribute("errorCode","メールアドレスまたはパスワードが不正です。");
+			return toLogin();
+		}else {
+			session.setAttribute("administratorName", administrator.getName());
+			return "forward:/employee/showList";
+		}
+	}
 
 }
