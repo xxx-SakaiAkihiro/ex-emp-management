@@ -1,28 +1,19 @@
-package jp.co.sample.domain;
+package jp.co.sample.form;
 
 /**
- *	管理者を情報を表すドメイン.
- *
+ * 管理者情報登録時に使用するフォーム.
+ * 
  * @author sakai
+ *
  */
-public class Administrator {
+public class InsertAdministratorForm {
 
-	/** ID */
-	private Integer id;
 	/** 名前 */
 	private String name;
 	/** メールアドレス */
 	private String mailAddress;
 	/** パスワード */
 	private String password;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;
@@ -50,7 +41,7 @@ public class Administrator {
 
 	@Override
 	public String toString() {
-		return "Administrator [id=" + id + ", name=" + name + ", mailAddress=" + mailAddress + ", password=" + password
+		return "InsertAdministratorForm [name=" + name + ", mailAddress=" + mailAddress + ", password=" + password
 				+ "]";
 	}
 

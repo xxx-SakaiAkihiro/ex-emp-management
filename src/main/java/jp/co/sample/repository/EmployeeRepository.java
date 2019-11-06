@@ -13,8 +13,9 @@ import org.springframework.stereotype.Repository;
 import jp.co.sample.domain.Employee;
 
 /**
+ *	employeesテーブルを操作するリポジトリ(DAO).
+ *
  * @author sakai
- *	employeesテーブルを操作するリポジトリ(DAO)
  */
 @Repository
 public class EmployeeRepository {
@@ -39,7 +40,11 @@ public class EmployeeRepository {
 		return employee;
 	};
 	
-	//従業員一覧情報を入社日順で取得する
+	/**
+	 * 従業員一覧情報を入社日順で取得する.
+	 * 
+	 * @return 従業員一覧情報　従業員が存在しない場合は0件の従業員一覧を返す
+	 */
 	public List<Employee> findAll(){
 		String findAllSql = "SELECT id, name, image, gender, hire_date, mail_address, zip_code, address, telephone, salary, characteristics, dependents_count"
 							+ "FROM employees ORDER BY hire_date";
@@ -47,7 +52,12 @@ public class EmployeeRepository {
 		return employeeList;		
 	}
 	
-	//主キーから従業員情報を取得する
+	/**
+	 * 主キーから従業員情報を取得する.
+	 * 
+	 * @param id 主キー
+	 * @return 従業員情報　従業員が存在しない場合はSpringが自動的に例外を発生する
+	 */
 	public Employee load(Integer id) {
 		String loadSql = "SELECT id, name, image, gender, hire_date, mail_address, zip_code, address, telephone, salary, characteristics, dependents_count"
 							+ "FROM employees WHERE id = :id";
@@ -56,9 +66,14 @@ public class EmployeeRepository {
 		return employee;
 	}
 	
-	//従業員情報を変更する
+	/**
+	 * 従業員情報を変更する.
+	 * 
+	 * @param employee 従業員情報
+	 */
 	public void update(Employee employee) {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(employee);
+		
 		String updateSql = "UPDATE employees SET dependents_count = :dependentsCount WHERE id = :id";
 		template.update(updateSql, param);
 	}

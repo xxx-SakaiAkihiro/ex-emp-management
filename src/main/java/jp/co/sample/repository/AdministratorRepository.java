@@ -1,5 +1,7 @@
 package jp.co.sample.repository;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -11,8 +13,9 @@ import org.springframework.stereotype.Repository;
 import jp.co.sample.domain.Administrator;
 
 /**
+ * administratorsテーブルを操作するリポジトリ(DAO).
+ * 
  * @author sakai 
- * administratorsテーブルを操作するリポジトリ(DAO)
  */
 @Repository
 public class AdministratorRepository {
@@ -29,24 +32,32 @@ public class AdministratorRepository {
 		return administrator;
 	};
 
-	// 管理者情報を挿入するメソッド
+	/**
+	 * 管理者情報を挿入する.
+	 * 
+	 * @param administrator 管理者情報
+	 */
 	public void insert(Administrator administrator) {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(administrator);
-		String insertSql = "INSERT INTO administrator(name, mail_address, password) VALUES(:name, :mailAddress, :password) WHERE id = :id";
+		String insertSql = "INSERT INTO administrator(name, mail_address, password) VALUES(:name, :mailAddress, :password)";
 		template.update(insertSql, param);
 	}
 
-	// メールアドレスとパスワードから管理者情報を取得する
+	/**
+	 * メールアドレスとパスワードから管理者情報を取得する.
+	 * 
+	 * @param mailAddress メールアドレス
+	 * @param password パスワード
+	 * @return 管理者情報　検索されない場合はnullが返る
+	 */
 	public Administrator findByMailAddressAndPassword(String mailAddress, String password) {
 		String findSql = "SELECT id, name, mail_address, password FROM administrators WHERE mail_address = :mailAddress && password = :password";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("mailAddress", mailAddress).addValue("password", password);
-		if(mailAddress == null || password == null) {
-			Administrator administrator = template.queryForObject(findSql, param, ADMINISTRATOR_ROW_MAPPER);
-			return administrator;
-		}else {
+		List<Administrator> administratorList = template.query(findSql, param, ADMINISTRATOR_ROW_MAPPER);
+		if(administratorList.size() == 0) {
 			return null;
 		}
-		
+		return administratorList.get(0);
 	}
 
 }
