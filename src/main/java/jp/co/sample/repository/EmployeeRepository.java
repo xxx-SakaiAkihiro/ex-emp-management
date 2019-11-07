@@ -46,7 +46,7 @@ public class EmployeeRepository {
 	 * @return 従業員一覧情報　従業員が存在しない場合は0件の従業員一覧を返す
 	 */
 	public List<Employee> findAll(){
-		String findAllSql = "SELECT id, name, image, gender, hire_date, mail_address, zip_code, address, telephone, salary, characteristics, dependents_count"
+		String findAllSql = "SELECT id, name, image, gender, hire_date, mail_address, zip_code, address, telephone, salary, characteristics, dependents_count "
 							+ "FROM employees ORDER BY hire_date";
 		List<Employee> employeeList = template.query(findAllSql, EMPLOYEE_ROW_MAPPER);
 		return employeeList;		
@@ -59,7 +59,7 @@ public class EmployeeRepository {
 	 * @return 従業員情報　従業員が存在しない場合はSpringが自動的に例外を発生する
 	 */
 	public Employee load(Integer id) {
-		String loadSql = "SELECT id, name, image, gender, hire_date, mail_address, zip_code, address, telephone, salary, characteristics, dependents_count"
+		String loadSql = "SELECT id, name, image, gender, hire_date, mail_address, zip_code, address, telephone, salary, characteristics, dependents_count "
 							+ "FROM employees WHERE id = :id";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 		Employee employee = template.queryForObject(loadSql, param, EMPLOYEE_ROW_MAPPER);

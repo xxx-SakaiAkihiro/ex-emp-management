@@ -26,7 +26,7 @@ public class AdministratorController {
 
 	@Autowired
 	private AdministratorService administratorService;
-	
+
 	@Autowired
 	private HttpSession session;
 
@@ -34,7 +34,7 @@ public class AdministratorController {
 	public InsertAdministratorForm setUpInsertAdministratorForm() {
 		return new InsertAdministratorForm();
 	}
-	
+
 	@ModelAttribute
 	public LoginForm setUpLoginForm() {
 		return new LoginForm();
@@ -49,7 +49,7 @@ public class AdministratorController {
 	public String toInsert() {
 		return "/administrator/insert";
 	}
-	
+
 	/**
 	 * ログイン画面にフォワードする処理.
 	 * 
@@ -59,7 +59,7 @@ public class AdministratorController {
 	public String toLogin() {
 		return "/administrator/login";
 	}
-	
+
 	/**
 	 * 管理者情報を登録する.
 	 * 
@@ -77,18 +77,18 @@ public class AdministratorController {
 	/**
 	 * ログイン処理をする.
 	 * 
-	 * @param form メールアドレスとパスワード
+	 * @param form  メールアドレスとパスワード
 	 * @param model エラーメッセージ表示用
-	 * 	@return ログイン失敗時、ログイン画面にフォワード
+	 * @return ログイン失敗時、ログイン画面にフォワード
 	 * @return ログイン成功時、従業員情報一覧にフォワード
 	 */
 	@RequestMapping("/login")
 	public String login(LoginForm form, Model model) {
 		Administrator administrator = administratorService.login(form.getMailAddress(), form.getPassword());
-		if(administrator == null) {
-			model.addAttribute("errorCode","メールアドレスまたはパスワードが不正です。");
+		if (administrator == null) {
+			model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
 			return toLogin();
-		}else {
+		} else {
 			session.setAttribute("administratorName", administrator.getName());
 			return "forward:/employee/showList";
 		}
