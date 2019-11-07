@@ -21,15 +21,35 @@ public class EmployeeService {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
-	
+
 	/**
 	 * 従業員一覧情報を入社日順で取得する.
 	 * 
-	 * @return 従業員一覧情報　従業員が存在しない場合は0件の従業員一覧を返す
+	 * @return 従業員一覧情報 従業員が存在しない場合は0件の従業員一覧を返す
 	 */
-	public List<Employee> showList(){
+	public List<Employee> showList() {
 		List<Employee> employeeList = employeeRepository.findAll();
 		return employeeList;
 	}
+
+	/**
+	 * 主キーから従業員情報を取得する.
+	 * 
+	 * @param id 主キー
+	 * @return 従業員情報 従業員が存在しない場合はSpringが自動的に例外を発生する
+	 */
+	public Employee showDetail(Integer id) {
+		Employee employee = employeeRepository.load(id);
+		return employee;
+	}
 	
+	/**
+	 * 従業員情報を変更する.
+	 * 
+	 * @param employee 従業員情報
+	 */
+	public void update(Employee employee) {
+		employeeRepository.update(employee);
+	}
+
 }

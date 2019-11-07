@@ -78,9 +78,8 @@ public class AdministratorController {
 	 * ログイン処理をする.
 	 * 
 	 * @param form  メールアドレスとパスワード
-	 * @param model エラーメッセージ表示用
-	 * @return ログイン失敗時、ログイン画面にフォワード
-	 * @return ログイン成功時、従業員情報一覧にフォワード
+	 * @param model requestスコープ
+	 * @return ログイン成功時、従業員情報一覧にフォワード（ログイン失敗時、ログイン画面にフォワード）
 	 */
 	@RequestMapping("/login")
 	public String login(LoginForm form, Model model) {
@@ -88,10 +87,20 @@ public class AdministratorController {
 		if (administrator == null) {
 			model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
 			return toLogin();
-		} else {
-			session.setAttribute("administratorName", administrator.getName());
-			return "forward:/employee/showList";
 		}
+		session.setAttribute("administratorName", administrator.getName());
+		return "forward:/employee/showList";
+	}
+
+	/**
+	 * ログアウトをする処理.
+	 * 
+	 * @return 「ログイン画面」にフォワード
+	 */
+	@RequestMapping("/logout")
+	public String logout() {
+		session.invalidate();
+		return "redirect:/";
 	}
 
 }
