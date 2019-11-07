@@ -93,7 +93,7 @@ public class AdministratorController {
 	}
 
 	/**
-	 * ログアウトをする処理.
+	 * ログアウト処理をする.
 	 * 
 	 * @return 「ログイン画面」にフォワード
 	 */
